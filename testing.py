@@ -6,10 +6,10 @@ for i in range(100):
     print(count)
     for i in range(2, int(x**(0.5))):
         if x % i == 0:
-            #print(x, "False")
+            print(x, "False")
             break
     else:
-        #print(x, "True")
+        print(x, "True")
         count += 1
 
 print(count)

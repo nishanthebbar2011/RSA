@@ -3,6 +3,7 @@ import UtilityMath
 
 def choose_r(n):
     """
+    Needed for Miller-Rabin's.
     Returns greatest 'r' such that (n - 1) == (2**r) * d
     :param n:
     :return:

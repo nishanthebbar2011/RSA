@@ -22,14 +22,17 @@ def gcd(a, b):
     :param b:
     :return: int
     """
+
     if a > b:
         a, b = b, a
-    if a == 0:
-        return b
-    return gcd(b % a, b)
+
+    while a:
+        a, b = b % a, a
+
+    return b
 
 def lcm(a, b):
-    return (a * b)// gcd(a, b)
+    return (a * b) // gcd(a, b)
 
 def extended_gcd(a, b):
     """
@@ -64,3 +67,5 @@ def multiplicative_modular_inverse(e, n):
         return (x % n + n) % n
     else:
         raise Exception("Inverse does not exist. Not co-primes")
+
+print(gcd(511, 1421))
