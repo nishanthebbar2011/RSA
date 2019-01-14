@@ -10,8 +10,8 @@ class User:
         self.q = Primality.generate_large_prime()
         self.n = self.p * self.q
         self.totient = UtilityMath.lcm(self.p - 1, self.q - 1)#Reference: Euler Totient Function -https://en.wikipedia.org/wiki/Carmichael_function
-        self.public_key = 65537 #A very common choice for thr public key. it helps to ensure faster encryption.
-        self.private_key = UtilityMath.multiplicative_modular_inverse(self.public_key, self.totient)
+        self.public_key = 65537, self.n #A very common choice for thr public key. it helps to ensure faster encryption.
+        self.__private_key = UtilityMath.multiplicative_modular_inverse(self.public_key[0], self.totient)
 
 
 
@@ -19,9 +19,11 @@ class User:
         """Convert string to long integer
         Args:
             message: string
+        :return
+            Int: Integer representation, corresponding to the string.
         REFERENCE
         =========
-        https://github.com/dlitz/pycrypto/blob/master/lib/Crypto/Util/number.py
+        https://github.com/kaushiksk/rsasim/blob/master/rsasim/rsa.py
         """
 
         acc = 0
@@ -40,9 +42,11 @@ class User:
         """Convert long to byte string
         Args:
                 number: long integer to convert to string
+        :return
+                String: Message, corresponding to the integer.
         REFERENCE
         =========
-        https://github.com/dlitz/pycrypto/blob/master/lib/Crypto/Util/number.py
+        https://github.com/kaushiksk/rsasim/blob/master/rsasim/rsa.py
         """
 
         s = bytes('', 'utf-8')
@@ -58,7 +62,7 @@ class User:
             i += 1
         return s[i:]
 
-    def encrypt(self, message, ):
+    def encrypt(self, message, public_key):
         """
         Encrypts the message using the Public key of the receiver.
         :param message: String
@@ -68,17 +72,18 @@ class User:
 
         if message.bit_length() > self.n.bit_length():
            raise ValueError("Please enter a smaller string!")
-        print(message)
-        print(UtilityMath.modular_exponentiation(message, self.public_key, self.n))
-        return UtilityMath.modular_exponentiation(message, self.public_key, self.n)
+        return UtilityMath.modular_exponentiation(message, public_key[0], public_key[1])
 
     def decrypt(self, ciphertext):
-        print(ciphertext)
-        print(UtilityMath.modular_exponentiation(ciphertext, self.private_key, self.n))
-        return self.recover_string(UtilityMath.modular_exponentiation(ciphertext, self.private_key, self.n))
+        return self.recover_string(UtilityMath.modular_exponentiation(ciphertext, self.__private_key, self.n))
 
-u = User()
+    def sign(self, message):
+        return UtilityMath.modular_exponentiation(hash(self.process_string(message)), self.__private_key, self.n)
 
-ciphertext = u.encrypt("hello")
-print(u.decrypt(ciphertext))
+    def verify(self, message, signed_message, public_key):
+        if UtilityMath.modular_exponentiation(signed_message, public_key[0], public_key[1]) == hash(self.process_string(message)):
+            print("The integrity of the message has been verified")
+            return True
+        return False
+
 

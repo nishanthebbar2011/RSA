@@ -68,4 +68,3 @@ def multiplicative_modular_inverse(e, n):
     else:
         raise Exception("Inverse does not exist. Not co-primes")
 
-print(gcd(511, 1421))

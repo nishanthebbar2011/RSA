@@ -21,7 +21,9 @@ def miller_rabins(n, k = 40):
     It is a probabibilistic method for testing primality.
     :param
         'n': Number whose primality is to be determined
-        'k': Parameter that describes the accuracy of the Miller Rabin's test https://stackoverflow.com/questions/6325576/how-many-iterations-of-rabin-miller-should-i-use-for-cryptographic-safe-primes
+        'k': Parameter that describes the accuracy of the Miller Rabin's test. https://stackoverflow.com/questions/6325576/how-many-iterations-of-rabin-miller-should-i-use-for-cryptographic-safe-primes
+    :return
+        Returns True, if the number is probably prime. If composite, returns False.
     """
     r = choose_r(n - 1) #Express 'n - 1' in the form of ((2**r) * d), where 'd  is odd
     d = (n - 1) // (2**r)
